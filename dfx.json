@@ -1,0 +1,29 @@
+{
+  "canisters": {
+    "dnft_backend": {
+      "main": "src/dnft_backend/main.mo",
+      "type": "motoko"
+    },
+    "dnft_frontend": {
+      "dependencies": [
+        "dnft_backend"
+      ],
+      "frontend": {
+        "entrypoint": "src/dnft_frontend/src/index.html"
+      },
+      "source": [
+        "src/dnft_frontend/assets",
+        "dist/dnft_frontend/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

@@ -1,7 +1,7 @@
 {
   "canisters": {
     "dnft_backend": {
-      "main": "src/dnft_backend/main.mo",
+      "main": "src/dnft_backend/DNFT721.mo",
       "type": "motoko"
     },
     "dnft_frontend": {

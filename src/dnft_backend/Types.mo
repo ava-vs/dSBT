@@ -19,6 +19,7 @@ module {
     #Unauthorized;
     #InvalidTokenId;
     #ZeroAddress;
+    #NoNFT;
     #Other;
   };
 
@@ -28,6 +29,7 @@ module {
   };
 
   public type OwnerResult = Result<Principal, ApiError>;
+  
   public type TxReceipt = Result<Nat, ApiError>;
   
   public type TransactionId = Nat;
@@ -52,6 +54,8 @@ module {
     metadata: MetadataDesc;
   };
 
+  public type NftResult = Result<Nft, ApiError>;
+  
   public type ExtendedMetadataResult = Result<{
     metadata_desc: MetadataDesc;
     token_id: TokenId;

@@ -64,7 +64,7 @@ shared actor class Dip721NFT(custodian: Principal) {
       tokenType = GLOBAL_TOKEN_SYMBOL;
     };
     allNfts := List.push(nft, allNfts);
-    let res = dNftMap.put(caller, nft);
+    dNftMap.put(caller, nft);
     return #Ok({
       token_id = newId;
       id = transactionId;
@@ -86,7 +86,7 @@ shared actor class Dip721NFT(custodian: Principal) {
       tokenType = GLOBAL_TOKEN_SYMBOL;
     };
     allNfts := List.push(nft, allNfts);
-    let res = dNftMap.put(caller, nft);
+    dNftMap.put(caller, nft);
     return #Ok({
       token_id = newId;
       id = transactionId;
@@ -117,4 +117,12 @@ shared actor class Dip721NFT(custodian: Principal) {
   public query func getAllNft() : async [Nft] {
     List.toArray(allNfts);
   };
+
+  public query func getNftHistoryByUser(user : Principal) : async [Nft] {
+    let userNfts = List.filter(allNfts, func(nft: Nft) : Bool {
+        nft.owner == user
+    });
+    List.toArray(userNfts);
+  }
+
 }

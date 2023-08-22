@@ -1,17 +1,11 @@
 import Nat "mo:base/Nat";
-import Nat8 "mo:base/Nat8";
-import Nat16 "mo:base/Nat16";
-import Nat32 "mo:base/Nat32";
 import Nat64 "mo:base/Nat64";
 import Array "mo:base/Array";
-import Option "mo:base/Option";
 import Bool "mo:base/Bool";
 import Principal "mo:base/Principal";
 import Types "./Types"; 
 import List "mo:base/List";
 import Text "mo:base/Text";
-import TrieMap "mo:base/TrieMap";
-import Map "mo:base/HashMap";
 import Buffer "mo:base/Buffer";
 
 shared actor class Dip721NFT(custodian: Principal) {
@@ -25,22 +19,6 @@ shared actor class Dip721NFT(custodian: Principal) {
 
   type Nft = Types.Nft;
 
-  var dNftMap : Map.HashMap<Principal, Nft> = 
-       Map.HashMap<Principal, Nft>(10, Principal.equal, Principal.hash);
-
-  public shared({ caller }) func getDNft() : async Types.NftResult {
-    
-    let item = dNftMap.get(caller);
-    switch (item) {
-      case (null) {
-        return #Err(#NoNFT);
-      };
-      case (?nft) {
-        return #Ok(nft);
-      };
-    };
-  };
-
   public func createMetadataFromLink(link: Text) : async [Types.MetadataPart] {
     let metadataPart: Types.MetadataPart = {
       purpose = #Preview;
@@ -48,13 +26,12 @@ shared actor class Dip721NFT(custodian: Principal) {
         key = "URL";
         val = #LinkContent(link)
       }];
-      // Преобразование текстовой ссылки в Blob
       data = Text.encodeUtf8(link); 
     };
     return [metadataPart];
   };
 
-  public shared({ caller }) func mintNFTWithLink(to: Principal, link: Text) : async Types.MintReceipt {
+  public func mintNFTWithLink(to: Principal, link: Text) : async Types.MintReceipt {
     let metadata = await createMetadataFromLink(link);
     let newId = Nat64.fromNat(List.size(allNfts));
     let nft: Types.Nft = {
@@ -64,7 +41,6 @@ shared actor class Dip721NFT(custodian: Principal) {
       tokenType = GLOBAL_TOKEN_SYMBOL;
     };
     allNfts := List.push(nft, allNfts);
-    dNftMap.put(caller, nft);
     return #Ok({
       token_id = newId;
       id = transactionId;
@@ -72,10 +48,6 @@ shared actor class Dip721NFT(custodian: Principal) {
   };
 
     public shared({ caller }) func mintNFTWithLinkWithoutTo(link: Text) : async Types.MintReceipt {
-    let check = await getDNft();
-    // switch (check) { 
-    //   case (#Ok(some)) return #Err(#Other);
-    // };
 
     let metadata = await createMetadataFromLink(link);
     let newId = Nat64.fromNat(List.size(allNfts));
@@ -86,7 +58,6 @@ shared actor class Dip721NFT(custodian: Principal) {
       tokenType = GLOBAL_TOKEN_SYMBOL;
     };
     allNfts := List.push(nft, allNfts);
-    dNftMap.put(caller, nft);
     return #Ok({
       token_id = newId;
       id = transactionId;
@@ -97,22 +68,27 @@ shared actor class Dip721NFT(custodian: Principal) {
     return n;
   };
 
-  public shared({ caller }) func getDNftByUser(user : Principal) : async Types.NftResult {
+ public func getDNftByUser(user : Principal) : async Types.NftResult {
+    let userNftOpt = findLast(allNfts, user);
     
-    let item = dNftMap.get(user);
-    switch (item) {
-      case (null) {
-        return #Err(#NoNFT);
-      };
-      case (?nft) {
-        return #Ok(nft);
-      };
-    };
+    switch (userNftOpt) {
+        case (null) #Err(#NoNFT);
+        case (?userNft) #Ok(userNft);
+    }
   };
 
-  public query (message) func greet() : async Text {
-    return "Hello, " # Principal.toText(message.caller) # "!";
-  };
+  private func findLast(nfts: List.List<Nft>, user: Principal) : ?Nft {
+      switch (nfts) {
+          case (null) null;
+       case (?(head, tail)) {
+            if (head.owner == user) {
+                ?head
+            } else {
+                findLast(tail, user)
+            }
+        };
+    }
+  };  
 
   public query func getAllNft() : async [Nft] {
     List.toArray(allNfts);
@@ -123,6 +99,9 @@ shared actor class Dip721NFT(custodian: Principal) {
         nft.owner == user
     });
     List.toArray(userNfts);
-  }
+  };
 
+  public query (message) func greet() : async Text {
+    return "Hello, your principal name is " # Principal.toText(message.caller);
+  }
 }

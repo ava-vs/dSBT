@@ -1,6 +1,4 @@
 import {createActor, dnft_backend} from "../../declarations/dnft_backend";
-import {AuthClient} from "@dfinity/auth-client"
-import {HttpAgent} from "@dfinity/agent";
 
 let actor = dnft_backend;
 
@@ -20,29 +18,56 @@ greetButton.onclick = async (e) => {
     return false;
 };
 
-const loginButton = document.getElementById("login");
-loginButton.onclick = async (e) => {
+const createButton = document.getElementById("create");
+createButton.onclick = async (e) => {
     e.preventDefault();
 
-    // create an auth client
-    let authClient = await AuthClient.create();
+    const inputField = document.getElementById("link");
+    const inputValue = inputField.value;
 
-    // start the login process and wait for it to finish
-    await new Promise((resolve) => {
-        authClient.login({
-            identityProvider: process.env.II_URL,
-            onSuccess: resolve,
-        });
-    });
+    createButton.setAttribute("disabled", true);
 
-    // At this point we're authenticated, and we can get the identity from the auth client:
-    const identity = authClient.getIdentity();
-    // Using the identity obtained from the auth client, we can create an agent to interact with the IC.
-    const agent = new HttpAgent({identity});
-    // Using the interface description of our webapp, we create an actor that we use to call the service methods.
-    actor = createActor(process.env.GREET_BACKEND_CANISTER_ID, {
-        agent,
-    });
+    // Interact with backend actor, calling the create method
+    const result = await actor.create(inputValue);
+
+    createButton.removeAttribute("disabled");
+
+    document.getElementById("result").innerText = result;
 
     return false;
 };
+
+var logo = document.getElementById("logo");
+if (logo) {
+  logo.addEventListener("click", function () {
+    window.open("http://avaVerificationLink");
+  });
+}
+
+var button = document.getElementById("button");
+if (button) {
+  button.addEventListener("click", function () {
+    window.open("https://nftLink");
+  });
+}
+
+var button1 = document.getElementById("button1");
+if (button1) {
+  button1.addEventListener("click", function () {
+    window.open("https://dNftLink");
+  });
+}
+
+var button2 = document.getElementById("button2");
+if (button2) {
+  button2.addEventListener("click", function () {
+    window.open("https://login");
+  });
+}
+
+// var button3 = document.getElementById("button3");
+// if (button3) {
+//   button3.addEventListener("click", function () {
+//     window.location.href = "responseFromDNFT";
+//   });
+// }

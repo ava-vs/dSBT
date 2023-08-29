@@ -1,7 +1,40 @@
 body {
     font-family: sans-serif;
     font-size: 1.5rem;
+    margin: 0;
+    line-height: normal;
+    background-image: url('back_create_dNFT.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  /* Responsiveness */
+.responsive-img {
+    max-width: 100%;
+    height: auto;
 }
+  
+  :root {
+    /* fonts */
+    --font-bruno-ace: "Bruno Ace";
+    --font-red-hat-display: "Red Hat Display";
+    --font-red-hat-text: "Red Hat Text";
+  
+    /* font sizes */
+    --font-size-base: 16px;
+  
+    /* Colors */
+    --color-orangered: #ee4817;
+    --color-white: #fff;
+  
+    /* Gaps */
+    --gap-xl: 20px;
+  
+    /* Paddings */
+    --padding-3xs: 10px;
+    --padding-13xl: 32px;
+  }
+  
 
 img {
     max-width: 50vw;
@@ -35,3 +68,266 @@ button[type="submit"] {
 #greeting:empty {
     display: none;
 }
+
+/* Media Queries */
+@media (max-width: 768px) {
+    body {
+        background-size: auto;
+    }
+
+    #login {
+        font-size: 14px;
+    }
+}
+ 
+.logo-icon {
+    position: absolute;
+    top: -2.01px;
+    left: 0;
+    width: 60px;
+    height: 68.46px;
+    cursor: pointer;
+  }
+  .logo-wrapper {
+    position: relative;
+    width: 59px;
+    height: 59px;
+  }
+  .ava,
+  .verification {
+    position: relative;
+    display: inline-block;
+    width: 97.39px;
+    height: 65.31px;
+    flex-shrink: 0;
+  }
+  .verification {
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    font-family: var(--font-red-hat-text);
+    width: 113.69px;
+    height: 33.87px;
+    margin-top: -27px;
+  }
+  .avaname,
+  .frame {
+    width: 113.69px;
+    height: 72px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .frame {
+    position: absolute;
+    top: -5px;
+    left: -9px;
+    height: 82px;
+    overflow: hidden;
+    justify-content: flex-end;
+  }
+  .frame-wrapper {
+    position: relative;
+    width: 121px;
+    height: 72px;
+  }
+  .desktop-3-inner,
+  .frame-parent {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .frame-parent {
+    padding: var(--padding-3xs) var(--padding-13xl);
+    align-items: center;
+  }
+  .desktop-3-inner {
+    margin: 0 !important;
+    position: absolute;
+    top: 23px;
+    left: 101px;
+    align-items: flex-start;
+    z-index: 0;
+  }
+  .button {
+    cursor: pointer;
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+    position: relative;
+    font-size: var(--font-size-base);
+    font-family: var(--font-bruno-ace);
+    color: var(--color-orangered);
+    text-align: left;
+    display: inline-block;
+  }
+  .nft1 {
+    display: flex;
+    flex-direction: row;
+    padding: var(--padding-3xs);
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .button2 {
+    cursor: pointer;
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+    position: relative;
+    font-size: var(--font-size-base);
+    font-family: var(--font-bruno-ace);
+    color: var(--color-orangered);
+    text-align: center;
+    display: inline-block;
+  }
+  .login1,
+  .menu {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+  .login1 {
+    padding: var(--padding-3xs) var(--padding-13xl);
+  }
+  .menu {
+    margin: 0 !important;
+    position: absolute;
+    top: calc(50% - 340px);
+    right: 40px;
+    width: 392px;
+    gap: 69px;
+    z-index: 1;
+  }
+  .text {
+    position: relative;
+  }
+  .creatednfttext {
+    align-self: stretch;
+    height: 73px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .text1 {
+    position: relative;
+    font-weight: 800;
+  }
+  .center1,
+  .uploadlink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .uploadlink {
+    height: 54px;
+    flex-direction: row;
+    padding: var(--padding-3xs);
+    box-sizing: border-box;
+    font-size: 20px;
+    font-family: var(--font-red-hat-display);
+  }
+  .center1 {
+    width: 652px;
+    overflow: hidden;
+    flex-direction: column;
+    gap: var(--gap-xl);
+  }
+  .input,
+  .inputblock {
+    border: 1px solid var(--color-orangered);
+    box-sizing: border-box;
+  }
+  .input {
+    background-color: var(--color-white);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  .inputblock {
+    position: relative;
+    width: 662px;
+    height: 40px;
+  }
+  .create,
+  .inputandbutton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .inputandbutton {
+    flex: 1;
+    justify-content: flex-start;
+  }
+  .create {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-orangered);
+    box-sizing: border-box;
+    width: 98px;
+    height: 40px;
+    padding: var(--padding-3xs);
+    justify-content: space-between;
+  }
+  .createbuttonblock {
+    position: relative;
+    width: 99px;
+    height: 40px;
+  }
+  .uploadblock {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 665px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .uploadblock-wrapper {
+    position: relative;
+    width: 665px;
+    height: 40px;
+  }
+  .center,
+  .desktop-3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .center {
+    margin: 0 !important;
+    position: absolute;
+    top: calc(50% - 103px);
+    left: calc(50% - 332px);
+    justify-content: center;
+    gap: var(--gap-xl);
+    z-index: 2;
+    font-size: 32px;
+    font-family: var(--font-red-hat-text);
+  }
+  .desktop-3 {
+    position: relative;
+    width: 100%;
+    height: 800px;
+    overflow: hidden;
+    justify-content: flex-start;
+    gap: 234px;
+    background-image: url(./public/desktop--3@3x.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    text-align: center;
+    font-size: 36px;
+    color: var(--color-orangered);
+    font-family: var(--font-bruno-ace);
+  }
+  

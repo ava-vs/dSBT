@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 dfx stop
-set -e
+# set -e
 # trap 'dfx stop' EXIT
 trap 'echo "DONE"' EXIT
 
@@ -24,20 +24,7 @@ dfx canister call dnft_backend mintNFTWithLinkWithoutTo '("url:sample_link")'
 
 echo "dNFT has been created!"
 
-# echo "Metadata: "
-
-# dfx canister call dnft_backend getMetadataDip721 "0"
-
 echo " "
 
-# echo "Call Verification canister for current principal"
-
-# dfx canister call ver init $(dfx identity get-principal)
-
-# echo "Call Reputation canister and increase reputation balance for current user"
-
-# dfx canister call rep incrementBalance '("'$(dfx identity get-principal)'", 1)'
-
-# echo "dNFT metadata will track reputation balance changes!"
 
 

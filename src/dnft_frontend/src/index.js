@@ -2,21 +2,21 @@ import {createActor, dnft_backend} from "../../declarations/dnft_backend";
 
 let actor = dnft_backend;
 
-const greetButton = document.getElementById("greet");
-greetButton.onclick = async (e) => {
-    e.preventDefault();
+// const greetButton = document.getElementById("greet");
+// greetButton.onclick = async (e) => {
+//     e.preventDefault();
 
-    greetButton.setAttribute("disabled", true);
+//     greetButton.setAttribute("disabled", true);
 
-    // Interact with backend actor, calling the greet method
-    const greeting = await actor.greet();
+//     // Interact with backend actor, calling the greet method
+//     const greeting = await actor.greet();
 
-    greetButton.removeAttribute("disabled");
+//     greetButton.removeAttribute("disabled");
 
-    document.getElementById("greeting").innerText = greeting;
+//     document.getElementById("greeting").innerText = greeting;
 
-    return false;
-};
+//     return false;
+// };
 
 const createButton = document.getElementById("create");
 createButton.onclick = async (e) => {
@@ -28,11 +28,12 @@ createButton.onclick = async (e) => {
     createButton.setAttribute("disabled", true);
 
     // Interact with backend actor, calling the create method
-    const result = await actor.create(inputValue);
+    const res = await actor.mintNFTWithLinkWithoutTo(inputValue);
 
     createButton.removeAttribute("disabled");
+    const receipt = res.Ok;
 
-    document.getElementById("result").innerText = result;
+    document.getElementById("result").innerText = `Dynamic NFT successfully created,\n Token ID: ${receipt.token_id}, Transaction ID: ${receipt.id}`;
 
     return false;
 };

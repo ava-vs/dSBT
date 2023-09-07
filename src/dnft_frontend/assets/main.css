@@ -3,7 +3,7 @@ body {
     font-size: 1.5rem;
     margin: 0;
     line-height: normal;
-    background-image: url('back_create_dNFT.webp');
+    background-image: url('back.png');
     background-size: cover;
     background-repeat: no-repeat;
   }
@@ -320,8 +320,7 @@ button[type="submit"] {
     height: 800px;
     overflow: hidden;
     justify-content: flex-start;
-    gap: 234px;
-    background-image: url(./back_create_dNFT.webp);
+    gap: 234px;   
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top;

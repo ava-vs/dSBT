@@ -190,6 +190,23 @@ actor IC_ICRC7 {
     };
   };
 
+  public shared ({ caller }) func updateMetaDemo(tokenId : Nat, link : Text) : async Types.MintReceipt {
+    let metadata : [MetadataPart] = [#LinkContent(link)];
+    let updatedMeta = await updateMetadata(caller, metadata);
+    switch (updatedMeta) {
+      case (user, null) {#Err(#Other)};
+      case (user, ?meta) {
+        let res = { 
+        token_id = tokenId;
+        id = transactionId;
+        owner = caller;
+        image = "image_rep.svg"; // TODO change to 2
+        link  = link;};
+        return #Ok(res)
+        }};
+    };
+  
+
   public func updateMetadata(user : Principal, metadata: Metadata) : async (Principal, ?Metadata) {
         var tokenId = 0;
         switch (tokenEntries.get(user)) {

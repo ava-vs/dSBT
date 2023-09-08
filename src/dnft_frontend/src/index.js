@@ -45,15 +45,26 @@ card.innerHTML = `
         </div>
         <div class="info-item">
           <span class="info-label">Link:</span>
-          <span class="info-value">${receipt.link}</span>
+          <span class="info-value" id="dip-link">${receipt.link}</span>
         </div>
       </div>
       <a href="http://ava.capetown/en" target="_blank"><button class="ava-button">aVa</button></a>
     </div>
-  
+    <div class="card-footer">
+    <button class="update-button" id="update-btn-dip">Update</button>
+  </div>
 `;
 
 document.getElementById('result').appendChild(card);
+
+document.getElementById(`update-btn-dip`).addEventListener('click', async function() {
+      
+  const res = await actor.updateMetaDemo(receipt.token_id,"updated_link");
+  const newData = res.Ok;
+  
+  document.getElementById(`dip-link`).innerText = newData.link;
+  
+});
 
 // ICRC7
 const cardICRC7 = document.createElement('div');
@@ -76,16 +87,26 @@ cardICRC7.innerHTML = `
         </div>
         <div class="info-item">
           <span class="info-label">Link:</span>
-          <span class="info-value">${receiptICRC.link}</span>
+          <span class="info-value" id="icrc-link">${receiptICRC.link}</span>
         </div>
       </div>
       <a href="http://ava.capetown/en" target="_blank"><button class="ava-button">aVa</button></a>
     </div>
-  
+    <div class="card-footer">
+    <button class="update-button" id="update-btn-icrc">Update</button>
+  </div>
 `;
 
 document.getElementById('result2').appendChild(cardICRC7);
-
+document.getElementById(`update-btn-icrc`).addEventListener('click', async function() {
+      
+    const res = await actorICRC.updateMetaDemo(receipt.token_id, "updated_link");
+    const newData = res.Ok;
+    
+    document.getElementById(`icrc-link`).innerText = newData.link;
+    
+  });
+  
     return false;
 };
 

@@ -1,7 +1,7 @@
 :root {
   --primary-color: #EE4817;
-  --secondary-color:  #EE4817;
-  --text-color:  #EE4817;
+  --secondary-color:  #49ee17;
+  --text-color:  white;
 }
 
 .card {
@@ -106,4 +106,14 @@
 
 .ava-button:hover {
   background-color: #c83d0e;
+}
+
+.update-button {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
 }

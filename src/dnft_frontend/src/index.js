@@ -50,21 +50,18 @@ card.innerHTML = `
       </div>
       <a href="http://ava.capetown/en" target="_blank"><button class="ava-button">aVa</button></a>
     </div>
-    <div class="card-footer">
-    <button class="update-button" id="update-btn-dip">Update</button>
-  </div>
 `;
 
 document.getElementById('result').appendChild(card);
 
-document.getElementById(`update-btn-dip`).addEventListener('click', async function() {
+// document.getElementById(`update-btn-dip`).addEventListener('click', async function() {
       
-  const res = await actor.updateMetaDemo(receipt.token_id,"updated_link");
-  const newData = res.Ok;
+//   const res = await actor.updateMetaDemo(receipt.token_id,"updated_link");
+//   const newData = res.Ok;
   
-  document.getElementById(`dip-link`).innerText = newData.link;
+//   document.getElementById(`dip-link`).innerText = newData.link;
   
-});
+// });
 
 // ICRC7
 const cardICRC7 = document.createElement('div');

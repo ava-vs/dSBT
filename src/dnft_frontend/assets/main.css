@@ -3,7 +3,7 @@ body {
     font-size: 1.5rem;
     margin: 0;
     line-height: normal;
-    background-image: url('back.png');
+    /* background-image: url('back.png'); */
     background-size: cover;
     background-repeat: no-repeat;
   }
@@ -57,16 +57,16 @@ button[type="submit"] {
     padding: 5px 20px;
     margin: 10px auto;
     float: right;
-}
-
-#greeting {
-    margin: 10px auto;
-    padding: 10px 60px;
-    border: 1px solid #222;
-}
-
-#greeting:empty {
-    display: none;
+    background-color: var(--primary-color); 
+    border: none;
+    color: white;
+    /* padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer; */
 }
 
 /* Media Queries */
@@ -193,7 +193,7 @@ button[type="submit"] {
   .menu {
     margin: 0 !important;
     position: absolute;
-    top: calc(50% - 340px);
+    top: 50px;
     right: 40px;
     width: 392px;
     gap: 69px;
@@ -306,9 +306,7 @@ button[type="submit"] {
   .center {
     margin: 0 !important;
     position: absolute;
-    top: calc(50% - 103px);
-    left: calc(50% - 332px);
-    justify-content: center;
+    top: 150px;
     gap: var(--gap-xl);
     z-index: 2;
     font-size: 32px;
@@ -317,7 +315,7 @@ button[type="submit"] {
   .desktop-3 {
     position: relative;
     width: 100%;
-    height: 800px;
+    height: 1200px;
     overflow: hidden;
     justify-content: flex-start;
     gap: 234px;   

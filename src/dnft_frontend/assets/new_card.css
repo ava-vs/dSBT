@@ -6,20 +6,23 @@
 
 .card {
   display: flex;
-  border: 2px solid var(--primary-color);
+  justify-content: space-between;
+  align-items: stretch;
+  max-width: 400px;
+  border: 2px solid var(--primary-color); 
   border-radius: 8px;
   overflow: hidden;
-  max-width: 400px;
-  position: relative;
+  background-color: white;
+  position: relative; 
 }
 
 .card::after {
-  content: "";
+  content: '';
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 34%;  
-  width: 2px;
+  left: auto;
+  transform: translateX(-50%);
+  height: 100%;
+  width: 1px;
   background-color: var(--primary-color);
 }
 

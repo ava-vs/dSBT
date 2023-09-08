@@ -2,22 +2,6 @@ import {createActor, dnft_backend} from "../../declarations/dnft_backend";
 
 let actor = dnft_backend;
 
-// const greetButton = document.getElementById("greet");
-// greetButton.onclick = async (e) => {
-//     e.preventDefault();
-
-//     greetButton.setAttribute("disabled", true);
-
-//     // Interact with backend actor, calling the greet method
-//     const greeting = await actor.greet();
-
-//     greetButton.removeAttribute("disabled");
-
-//     document.getElementById("greeting").innerText = greeting;
-
-//     return false;
-// };
-
 const createButton = document.getElementById("create");
 createButton.onclick = async (e) => {
     e.preventDefault();
@@ -35,8 +19,37 @@ createButton.onclick = async (e) => {
 
     document.getElementById("result").innerText = `Dynamic NFT successfully created,\n Token ID: ${receipt.token_id}, Transaction ID: ${receipt.id}`;
 
+const card = document.createElement('div');
+card.innerHTML = `
+  <div class="card">
+    <div class="card-image">
+      <img src="image_rep.svg" alt="Minted NFT"> 
+    </div>
+    <div class="card-content">
+      <h1 class="card-title">Minted NFT</h1>
+      <div class="card-info">
+        <div class="info-item">
+          <span class="info-label">Token ID:</span>
+          <span class="info-value">${receipt.token_id}</span> 
+        </div>
+        <div class="info-item">
+          <span class="info-label">Owner:</span>
+          <span class="info-value">${receipt.owner}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Link:</span>
+          <span class="info-value">${receipt.link}</span>
+        </div>
+      </div>
+      <button class="ava-button">aVa</button>
+    </div>
+  </div>
+`;
+
+document.getElementById('result').appendChild(card);
     return false;
 };
+
 
 var logo = document.getElementById("logo");
 if (logo) {
@@ -65,10 +78,3 @@ if (button2) {
     window.open("https://login");
   });
 }
-
-// var button3 = document.getElementById("button3");
-// if (button3) {
-//   button3.addEventListener("click", function () {
-//     window.location.href = "responseFromDNFT";
-//   });
-// }

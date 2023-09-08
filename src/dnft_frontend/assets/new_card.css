@@ -1,0 +1,101 @@
+:root {
+  --primary-color: #EE4817;
+  --secondary-color:  #EE4817;
+  --text-color:  #EE4817;
+}
+
+.card {
+  display: flex;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 400px;
+  position: relative;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 34%;  
+  width: 2px;
+  background-color: var(--primary-color);
+}
+
+.card-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-image img {
+  max-width: 400px;
+  height: auto;
+}
+
+.card-content {
+  font-family: 'Goldman', sans-serif;
+  flex: 2;
+  padding: 16px;
+  margin-left: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.card-title {
+  font-family: 'Goldman', sans-serif;
+  font-size: 24px;
+  color: var(--primary-color);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.card-info {
+  margin-bottom: 16px;
+}
+
+.info-item {
+  margin-bottom: 8px;
+}
+
+.info-label {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.info-value {
+  color: var(--primary-color);
+  margin-left: 8px;
+}
+
+.ava-button {
+  background-color: var(--primary-color); 
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ava-button:hover {
+  background-color: #c83d0e;
+}
+
+/* .ava-button {
+  cursor: pointer;
+  background-color: var(--primary-color);
+  color: white;
+  background: none;
+  border: none;
+}
+
+.ava-button img {
+  width:80px;
+  height: auto;
+} */

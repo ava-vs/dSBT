@@ -4,6 +4,10 @@
       "main": "src/dnft_backend/DNFT721.mo",
       "type": "motoko"
     },
+    "icrc_backend": {
+      "main": "src/icrc7_backend/ICRCImpl.mo",
+      "type": "motoko"
+    },
     "dnft_frontend": {
       "dependencies": [
         "dnft_backend"

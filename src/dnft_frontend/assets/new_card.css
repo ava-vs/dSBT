@@ -59,6 +59,24 @@
   margin-bottom: 16px;
 }
 
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#result, 
+#result2 {
+  flex: auto; 
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    flex-direction: column;
+  }
+}
+
 .info-item {
   margin-bottom: 8px;
 }
@@ -89,16 +107,3 @@
 .ava-button:hover {
   background-color: #c83d0e;
 }
-
-/* .ava-button {
-  cursor: pointer;
-  background-color: var(--primary-color);
-  color: white;
-  background: none;
-  border: none;
-}
-
-.ava-button img {
-  width:80px;
-  height: auto;
-} */

@@ -1,4 +1,5 @@
 import {createActor, dnft_backend} from "../../declarations/dnft_backend";
+import { icrc_backend } from "../../declarations/icrc_backend";
 
 let actor = dnft_backend;
 let actorICRC = icrc_backend;
@@ -16,17 +17,18 @@ createButton.onclick = async (e) => {
     const res = await actor.mintNFTWithLinkWithoutTo(inputValue);
 
     // Interact with ICRC7 actor
-    const resICRC7 = await actorICRC.mint(inputValue);
+    const resICRC7 = await actorICRC.mintDemo(inputValue);
 
     createButton.removeAttribute("disabled");
     const receipt = res.Ok;
     const receiptICRC = resICRC7.Ok;
 
-    document.getElementById("result").innerText = `Your Dynamic NFT:\n\n`;
+    document.getElementById("resultcontainer").innerText = `Your Dynamic NFT:\n\n`;
 
 const card = document.createElement('div');
+card.classList.add('card');
 card.innerHTML = `
-  <div class="card">
+  
     <div class="card-image">
       <img src="image_rep.svg" alt="Minted NFT"> 
     </div>
@@ -48,20 +50,21 @@ card.innerHTML = `
       </div>
       <a href="http://ava.capetown/en" target="_blank"><button class="ava-button">aVa</button></a>
     </div>
-  </div>
+  
 `;
 
 document.getElementById('result').appendChild(card);
 
-//
+// ICRC7
 const cardICRC7 = document.createElement('div');
+cardICRC7.classList.add('card');
 cardICRC7.innerHTML = `
-  <div class="card">
+  
     <div class="card-image">
-      <img src="image_rep.svg" alt="Minted NFT"> 
+      <img src="image_rep.svg" alt="reputation NFT"> 
     </div>
     <div class="card-content">
-      <h1 class="card-title">Minted NFT</h1>
+      <h1 class="card-title">ICRC7 NFT</h1>
       <div class="card-info">
         <div class="info-item">
           <span class="info-label">Token ID:</span>
@@ -78,7 +81,7 @@ cardICRC7.innerHTML = `
       </div>
       <a href="http://ava.capetown/en" target="_blank"><button class="ava-button">aVa</button></a>
     </div>
-  </div>
+  
 `;
 
 document.getElementById('result2').appendChild(cardICRC7);
@@ -98,14 +101,14 @@ if (logo) {
 var button = document.getElementById("button");
 if (button) {
   button.addEventListener("click", function () {
-    window.open("https://nftLink");
+    window.open("http://127.0.0.1:8000/?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai&id=bkyz2-fmaaa-aaaaa-qaaaq-cai");
   });
 }
 
 var button1 = document.getElementById("button1");
 if (button1) {
   button1.addEventListener("click", function () {
-    window.open("https://dNftLink");
+    window.open("http://127.0.0.1:8000/?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai&id=be2us-64aaa-aaaaa-qaabq-cai");
   });
 }
 

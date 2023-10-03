@@ -1,0 +1,119 @@
+:root {
+  --primary-color: #EE4817;
+  --secondary-color:  #49ee17;
+  --text-color:  white;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  max-width: 400px;
+  border: 2px solid var(--primary-color); 
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+  position: relative; 
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  left: auto;
+  transform: translateX(-50%);
+  height: 100%;
+  width: 1px;
+  background-color: var(--primary-color);
+}
+
+.card-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-image img {
+  max-width: 400px;
+  height: auto;
+}
+
+.card-content {
+  font-family: 'Goldman', sans-serif;
+  flex: 2;
+  padding: 16px;
+  margin-left: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.card-title {
+  font-family: 'Goldman', sans-serif;
+  font-size: 24px;
+  color: var(--primary-color);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.card-info {
+  margin-bottom: 16px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#result, 
+#result2 {
+  flex: auto; 
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    flex-direction: column;
+  }
+}
+
+.info-item {
+  margin-bottom: 8px;
+}
+
+.info-label {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.info-value {
+  color: var(--primary-color);
+  margin-left: 8px;
+}
+
+.ava-button {
+  background-color: var(--primary-color); 
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ava-button:hover {
+  background-color: #c83d0e;
+}
+
+.update-button {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}

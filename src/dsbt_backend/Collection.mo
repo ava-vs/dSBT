@@ -102,7 +102,13 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     Utils.appendArrays(oldMetadata, newMetadata);
   };
 
-  public func getSoulboundToken(user : Principal) : async Types.Result<Types.TokenMetadata, Types.CallError> {
+  type SoulboundToken = {
+    tokenId : Types.TokenId;
+    owner : Types.Account;
+    metadata : [(Text, Text)];
+  };
+
+  public func getSoulboundToken(user : Principal) : async Types.Result<SoulboundToken, Types.CallError> {
     let res_tokenid = await icrc7_tokens_of({ owner = user; subaccount = null });
     switch (res_tokenid) {
       case (#Err(err)) { return #Err(#TokenNotFound) };
@@ -113,10 +119,11 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
             return #Err(#TokenNotFound);
           };
           case (#Ok(metadata)) {
+            let text_pairs_metadata : [(Text, Text)] = Utils.convertMetadataToTextPairs(metadata);
             #Ok {
               tokenId : Types.TokenId = id;
               owner : Types.Account = { owner = user; subaccount = null };
-              metadata : [(Text, Types.Metadata)] = metadata;
+              metadata : [(Text, Text)] = text_pairs_metadata;
             };
           };
         };

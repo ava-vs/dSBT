@@ -137,6 +137,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
                   sender_hash = null;
                 };
                 let emitInstantResult = await hub_instant_canister.emitEvent(event);
+                return #Ok(emitInstantResult.size());
               };
               case (_) {};
             };

@@ -14,10 +14,11 @@ import Text "mo:base/Text";
 import Time "mo:base/Time";
 import Trie "mo:base/Trie";
 import TrieMap "mo:base/TrieMap";
+import Nat8 "mo:base/Nat8";
+import Int "mo:base/Int";
 
 import Types "./Types";
 import Utils "./Utils";
-
 shared actor class Collection(collectionOwner : Types.Account, init : Types.CollectionInitArgs) = Self {
 
   private stable let hub_canister_id = "lyp2p-oiaaa-aaaan-qedqq-cai";
@@ -43,7 +44,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
 
   private stable var tokens : Trie<Types.TokenId, Types.TokenMetadata> = Trie.empty();
   //owner Trie: use of Text insted of Account to improve performanances in lookup
-  private stable var owners : Trie<Text, Types.TokenId> = Trie.empty(); //fast lookup
+  private stable var owners : Trie<Text, [Types.TokenId]> = Trie.empty(); //fast lookup
   //balances Trie: use of Text insted of Account to improve performanances in lookup (could also retrieve this from owners[account].size())
   private stable var balances : Trie<Text, Nat> = Trie.empty(); //fast lookup
 
@@ -76,6 +77,85 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
   private func _keyFromTransactionId(t : Types.TransactionId) : Key<Types.TransactionId> {
     { hash = Hash.hash t; key = t };
   };
+
+  public shared ({ caller }) func issueToken(args : Types.RequestType) : async Types.MintReceipt {
+    switch (args) {
+      case (#Certficate(data)) {
+        // issue SBT
+        let default_arg = {
+          eventType : Types.EventName = #InstantReputationUpdateEvent;
+          number : Text = "1001";
+          image : Text = "dataurl";
+          publisher : Text = "Test Publisher";
+          graduate : ?Principal = ?Principal.fromText("aaaaa-aa");
+          username : Text = "Ivona Drake";
+          subject : Text = "Motoko Basic Course";
+          date : Text = "17 Nov 2023";
+          expire_at : ?Text = null;
+          metadata : [(Text, Text)] = [];
+          reputation = {
+            reviewer = data.reputation.reviewer;
+            category : Text = data.reputation.category;
+            value : Nat8 = data.reputation.value;
+          };
+        };
+        let issue_result = await issueSBT(
+          {
+            owner = Option.get<Principal>(data.graduate, data.reputation.reviewer);
+            subaccount = null;
+          },
+          Utils.convertTextPairsToNetadata(data.metadata),
+          {
+            category = data.reputation.category;
+            value = data.reputation.value;
+          },
+        );
+        switch (issue_result) {
+          case (#Err(err)) {
+            return #Err(#GenericError { error_code = 100; message = " Error" });
+          };
+          case (#Ok(res)) {
+            switch (data.eventType) {
+              case (#InstantReputationUpdateEvent) {
+                // call event hub
+                let hub_instant_canister : Types.InstantReputationUpdateEvent = actor (hub_canister_id);
+
+                let event : Types.Event = {
+                  eventType : Types.EventName = #InstantReputationUpdateEvent;
+                  topics : [Types.EventField] = [];
+                  details = null;
+                  reputation_change = {
+                    user = caller;
+                    reviewer = ?caller;
+                    value = ?Nat8.toNat(data.reputation.value);
+                    category = data.reputation.category;
+                    source = (Principal.toText(Principal.fromActor(Self)), res);
+                    timestamp : Nat = Option.get<Nat>(Nat.fromText(Int.toText(Time.now())), 0);
+                    comment = ?data.subject;
+                    metadata : [(Text, Types.Metadata)] = Utils.convertTextPairsToNetadata(data.metadata);
+                  };
+                  sender_hash = null;
+                };
+                let emitInstantResult = await hub_instant_canister.emitEvent(event);
+                return #Ok(emitInstantResult.size());
+              };
+              case (_) {};
+            };
+
+          };
+        };
+
+      };
+      case (#EventBadge(data)) {};
+      case (#SimpleToken(data)) {};
+      case (#TokenWithEvent(data)) {};
+      case (#Other(data)) {};
+
+    };
+
+    #Err(#Unauthorized);
+  };
+
   public shared ({ caller }) func issueSBT(
     to : Types.Account,
     metadata : [(Text, Types.Metadata)],
@@ -102,18 +182,12 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     Utils.appendArrays(oldMetadata, newMetadata);
   };
 
-  type SoulboundToken = {
-    tokenId : Types.TokenId;
-    owner : Types.Account;
-    metadata : [(Text, Text)];
-  };
-
-  public func getSoulboundToken(user : Principal) : async Types.Result<SoulboundToken, Types.CallError> {
+  public func getSoulboundToken(user : Principal) : async Types.Result<Types.SoulboundToken, Types.CallError> {
     let res_tokenid = await icrc7_tokens_of({ owner = user; subaccount = null });
     switch (res_tokenid) {
       case (#Err(err)) { return #Err(#TokenNotFound) };
       case (#Ok(id)) {
-        let res_metadata = await icrc7_metadata(id);
+        let res_metadata = await icrc7_metadata(id[0]); // TODO get reputation token instead of [0]
         switch (res_metadata) {
           case (#Err(_)) {
             return #Err(#TokenNotFound);
@@ -121,7 +195,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
           case (#Ok(metadata)) {
             let text_pairs_metadata : [(Text, Text)] = Utils.convertMetadataToTextPairs(metadata);
             #Ok {
-              tokenId : Types.TokenId = id;
+              tokenId : Types.TokenId = id[0];
               owner : Types.Account = { owner = user; subaccount = null };
               metadata : [(Text, Text)] = text_pairs_metadata;
             };
@@ -239,7 +313,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     };
   };
 
-  public shared query func icrc7_tokens_of(account : Types.Account) : async Types.Result<Types.TokenId, Types.CallError> {
+  public shared query func icrc7_tokens_of(account : Types.Account) : async Types.TokensOfResult {
     let acceptedAccount : Types.Account = _acceptAccount(account);
     let accountText : Text = Utils.accountToText(acceptedAccount);
     let item = Trie.get(owners, _keyFromText accountText, Text.equal);
@@ -427,9 +501,9 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     let acceptedTo : Types.Account = _acceptAccount(mintArgs.to);
 
     //todo add a more complex roles management
-    if (Principal.notEqual(caller, owner.owner)) {
-      return #Err(#Unauthorized);
-    };
+    // if (Principal.notEqual(caller, owner.owner)) {
+    //   return #Err(#Unauthorized);
+    // };
 
     //check on supply cap overflow
     if (supplyCap != null) {
@@ -461,7 +535,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     let tokenId : Types.TokenId = mintArgs.token_id;
     tokens := Trie.put(tokens, _keyFromTokenId tokenId, Nat.equal, newToken).0;
 
-    // _addTokenToOwners(acceptedTo, mintArgs.token_id);
+    _addTokenToOwners(acceptedTo, mintArgs.token_id);
 
     _incrementBalance(acceptedTo);
 
@@ -519,27 +593,46 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
 
   // private func _addTokenToOwners(account : Types.Account, tokenId : Types.TokenId) {
   //   //get Textual rapresentation of the Account
-  //   let textAccount : Text = Utils.accountToText(account);
+  //   let textAccount : Text = Utils.accountToText({
+  //     owner = account.owner;
+  //     subaccount = null;
+  //   });
 
-  //   //find the tokens owned by an account, in order to add the new one
-  //   let newOwners = Utils.nullishCoalescing<Types.TokenId>(Trie.get(owners, _keyFromText textAccount, Text.equal), 0);
+  //   //find the token owned by an account, in order to replace it
+  //   let existingToken = Trie.get(owners, _keyFromText textAccount, Text.equal);
 
-  //   //add the token id
-  //   owners := Trie.put(owners, _keyFromText textAccount, Text.equal, Utils.pushIntoArray<Types.TokenId>(tokenId, newOwners)).0;
+  //   switch (existingToken) {
+  //     case (null) {
+  //       owners := Trie.put(owners, _keyFromText textAccount, Text.equal, tokenId).0;
+  //     };
+  //     case (?elem) {};
+  //   };
+
   // };
 
-  // private func _removeTokenFromOwners(account : Types.Account, tokenId : Types.TokenId) {
-  //   //get Textual rapresentation of the Account
-  //   let textAccount : Text = Utils.accountToText(account);
+  private func _addTokenToOwners(account : Types.Account, tokenId : Types.TokenId) {
+    //get Textual rapresentation of the Account
+    let textAccount : Text = Utils.accountToText(account);
 
-  //   //find the tokens owned by an account, in order to add the new one
-  //   let newOwners = Utils.nullishCoalescing<[Types.TokenId]>(Trie.get(owners, _keyFromText textAccount, Text.equal), []);
+    //find the tokens owned by an account, in order to add the new one
+    let newOwners = Utils.nullishCoalescing<[Types.TokenId]>(Trie.get(owners, _keyFromText textAccount, Text.equal), []);
 
-  //   let updated : [Types.TokenId] = Array.filter<Types.TokenId>(newOwners, func x = x != tokenId);
+    //add the token id
+    owners := Trie.put(owners, _keyFromText textAccount, Text.equal, Utils.pushIntoArray<Types.TokenId>(tokenId, newOwners)).0;
+  };
 
-  //   //add the token id
-  //   owners := Trie.put(owners, _keyFromText textAccount, Text.equal, updated).0;
-  // };
+  private func _removeTokenFromOwners(account : Types.Account, tokenId : Types.TokenId) {
+    //get Textual rapresentation of the Account
+    let textAccount : Text = Utils.accountToText(account);
+
+    //find the tokens owned by an account, in order to add the new one
+    let newOwners = Utils.nullishCoalescing<[Types.TokenId]>(Trie.get(owners, _keyFromText textAccount, Text.equal), []);
+
+    let updated : [Types.TokenId] = Array.filter<Types.TokenId>(newOwners, func x = x != tokenId);
+
+    //add the token id
+    owners := Trie.put(owners, _keyFromText textAccount, Text.equal, updated).0;
+  };
 
   private func _incrementBalance(account : Types.Account) {
     //get Textual rapresentation of the Account
@@ -612,8 +705,8 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
       //change the token owner
       _updateToken(tokenId, ?to, null);
 
-      // _addTokenToOwners(to, tokenId);
-      // _incrementBalance(to);
+      _addTokenToOwners(to, tokenId);
+      _incrementBalance(to);
     };
 
     return null;

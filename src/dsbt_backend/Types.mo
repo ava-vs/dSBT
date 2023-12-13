@@ -46,7 +46,13 @@ module {
 
   public type TokenId = Nat;
 
-  public type Metadata = { #Nat : Nat; #Int : Int; #Text : Text; #Blob : Blob; #Bool : Bool; };
+  public type Metadata = {
+    #Nat : Nat;
+    #Int : Int;
+    #Text : Text;
+    #Blob : Blob;
+    #Bool : Bool;
+  };
 
   public type TokenMetadata = {
     tokenId : TokenId;
@@ -75,9 +81,23 @@ module {
     metadata : [(Text, Metadata)];
   };
 
-  public type Reputation = {
-    tag : Text;
-    value : Nat8;
+  public type ReputationChangeRequest = {
+    user : Principal;
+    reviewer : ?Principal;
+    value : ?Nat;
+    category : Text;
+    timestamp : Nat;
+    source : (Text, Nat); // (doctoken_canisterId, documentId)
+    comment : ?Text;
+    metadata : [(Text, Metadata)];
+  };
+
+  public type Event = {
+    eventType : EventName;
+    topics : [EventField];
+    details : ?Text;
+    reputation_change : ReputationChangeRequest;
+    sender_hash : ?Text;
   };
 
   public type IssueArgs = {
@@ -213,13 +233,21 @@ module {
     emitEvent : Event -> async Result.Result<[(Text, Text)], Text>;
   };
 
-  public type Event = {
-    eventType : EventName;
-    topics : [EventField];
-    tokenId : ?Nat;
-    owner : ?Principal;
-    metadata : ?[(Text, Text)];
-    creationDate : ?Int;
+  // public type Event = {
+  //   eventType : EventName;
+  //   topics : [EventField];
+  //   tokenId : ?Nat;
+  //   owner : ?Principal;
+  //   metadata : ?[(Text, Text)];
+  //   creationDate : ?Int;
+  // };
+
+  public type Reputation = {
+    user : Principal;
+    reviewer : Principal;
+    value : Nat8;
+    comment : Text;
+    category : Text;
   };
 
   public type Subscriber = {
@@ -237,6 +265,11 @@ module {
     value : Blob;
   };
 
+  public type InstantReputationUpdateEvent = actor {
+    getCategories : () -> async [(Text, Text)];
+    emitEvent : (Event) -> async [Subscriber];
+  };
+
   public type EventName = {
     #CreateEvent;
     #BurnEvent;
@@ -245,6 +278,72 @@ module {
     #CollectionDeletedEvent;
     #AddToCollectionEvent;
     #RemoveFromCollectionEvent;
+    #InstantReputationUpdateEvent;
+    #AwaitingReputationUpdateEvent;
+    #NewRegistrationEvent;
+    #FeedbackSubmissionEvent;
     #Unknown;
+  };
+  public type SoulboundToken = {
+    tokenId : TokenId;
+    owner : Account;
+    metadata : [(Text, Text)];
+  };
+
+  public type RequestType = {
+    #Certficate : {
+      eventType : EventName;
+      number : Text;
+      image : Text;
+      publisher : Text;
+      graduate : ?Principal;
+      username : Text;
+      subject : Text;
+      date : Text;
+      expire_at : ?Text;
+      metadata : [(Text, Text)];
+      reputation : {
+        reviewer : Principal;
+        category : Text;
+        value : Nat8;
+      };
+    };
+    #EventBadge : {
+      soulbound : SoulboundToken;
+      eventType : EventName;
+      number : Text;
+      image : Text;
+      publisher : Text;
+      username : Text;
+      subject : Text;
+      role : Text;
+      result : Text;
+      date : Text;
+      reputation : {
+        reviewer : Text;
+        category : Text;
+        value : Nat8;
+      };
+    };
+    #SimpleToken : {
+      data : SoulboundToken;
+    };
+    #TokenWithEvent : {
+      soulbound : SoulboundToken;
+      eventType : EventName;
+      reputation : {
+        reviewer : Text;
+        category : Text;
+        value : Nat8;
+      };
+    };
+    #Other : {
+      soulbound : SoulboundToken;
+      reputation : {
+        reviewer : Text;
+        category : Text;
+        value : Nat8;
+      };
+    };
   };
 };

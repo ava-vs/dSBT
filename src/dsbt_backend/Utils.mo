@@ -135,6 +135,14 @@ module {
 		);
 	};
 
+	public func convertTextPairsToNetadata(textPairs : [(Text, Text)]) : [(Text, Types.Metadata)] {
+		let buffer = Buffer.Buffer<(Text, Types.Metadata)>(textPairs.size());
+		for (pair in textPairs.vals()) {
+			buffer.add(pair.0, #Text(pair.1));
+		};
+		Buffer.toArray(buffer);
+	};
+
 	public func textFromBlob(blob : Blob) : Text {
 		Text.join(",", Iter.map<Nat8, Text>(blob.vals(), Nat8.toText));
 	};

@@ -53,54 +53,57 @@ certificateForm.onsubmit = async (e) => {
         if ('Ok' in badgeReceipt) {
             // Success - handle the successful response
             console.log('Token issued successfully:', badgeReceipt.Ok);
-        } else {
-            // Error - handle the error response
-            console.error('Error issuing token:', badgeReceipt.Err);
-        }
-    } catch (error) {
-        // Handle any network or unexpected errors
-        console.error('An error occurred:', error);
-    } finally {
-        // Re-enable the submit button
-        submitButton.removeAttribute('disabled');
-    };
-    const receipt = badgeReceipt.Ok;
-    const card = document.createElement('div');
-    card.classList.add('card');
-    card.innerHTML = `
-  
-    <div class="card-image">
-      <img src="image_rep.svg" alt="Dynamic Soulbound Token"> 
-    </div>
-    <div class="card-content">
-      <h1 class="card-title">Minted SBT</h1>
-      <div class="card-info">
-        <div class="info-item">
-          <span class="info-label">Token ID:</span>
-          <span class="info-value">${receipt.token_id}</span> 
-        </div>
-        <div class="info-item">
-          <span class="info-label">Owner:</span>
-          <span class="info-value">${receipt.owner}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Value:</span>
-          <span class="info-value" id="dip-link">${receipt.reputation.value}</span>
-        </div>
-        <div class="info-item">
-        <span class="info-label">Category:</span>
-        <span class="info-value" id="category">${receipt.reputation.category}</span>
-      </div>
-      </div>
-      <a href="http://ava.capetown/en" target="_blank"><button class="ava-button">aVa</button></a>
-    </div>
-`;
 
-    document.getElementById("resultcontainer").innerText = `Your Dynamic SBT:\n\n`;
+            const receipt = badgeReceipt.Ok;
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.innerHTML = `
+          
+            <div class="card-image">
+              <img src="image_rep.svg" alt="Dynamic Soulbound Token"> 
+            </div>
+            <div class="card-content">
+              <h1 class="card-title">Minted SBT</h1>
+              <div class="card-info">
+                <div class="info-item">
+                  <span class="info-label">Token ID:</span>
+                  <span class="info-value">${receipt.token_id}</span> 
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Owner:</span>
+                  <span class="info-value">${receipt.owner}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Value:</span>
+                  <span class="info-value" id="dip-link">${receipt.reputation.value}</span>
+                </div>
+                <div class="info-item">
+                <span class="info-label">Category:</span>
+                <span class="info-value" id="category">${receipt.reputation.category}</span>
+              </div>
+              </div>
+              <a href="http://ava.capetown/en" target="_blank"><button class="ava-button">aVa</button></a>
+            </div>
+        `;
 
-    document.getElementById('result').appendChild(card);
+            document.getElementById("resultcontainer").innerText = `Your Dynamic SBT:\n\n`;
+
+            document.getElementById('result').appendChild(card);
+        
+
+    } else {
+        // Error - handle the error response
+        console.error('Error issuing token:', badgeReceipt.Err);
+    }
+} catch (error) {
+    // Handle any network or unexpected errors
+    console.error('An error occurred:', error);
+} finally {
+    // Re-enable the submit button
+    submitButton.removeAttribute('disabled');
 };
 
+};
 // For menu and logo
 
 var logo = document.getElementById("logo");

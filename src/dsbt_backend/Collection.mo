@@ -78,7 +78,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     { hash = Hash.hash t; key = t };
   };
 
-  public shared ({ caller }) func testCard() : async Types.BadgeReceipt {
+  public shared ({ caller }) func test() : async Types.BadgeReceipt {
     return #Ok {
       tokenId = 100;
       owner = { owner = caller; subaccount = null };

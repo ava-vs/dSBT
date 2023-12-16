@@ -1,16 +1,13 @@
 {
-  "canisters": {
-    "dnft_backend": {
-      "main": "src/dnft_backend/DNFT721.mo",
+  "canisters": {    
+    "dsbt_backend": {
+      "main": "src/dsbt_backend/Collection.mo",
       "type": "motoko"
     },
-    "icrc_backend": {
-      "main": "src/icrc7_backend/ICRCImpl.mo",
-      "type": "motoko"
-    },
-    "dnft_frontend": {
+    "frontend": {
       "dependencies": [
-        "dnft_backend"
+        "dsbt_backend",
+        "internet_identity"
       ],
       "frontend": {
         "entrypoint": "src/dnft_frontend/src/index.html"
@@ -20,6 +17,17 @@
         "dist/dnft_frontend/"
       ],
       "type": "assets"
+    },
+    "internet_identity": {
+      "type": "custom",
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz",
+      "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+      },
+      "frontend": {}
     }
   },
   "defaults": {

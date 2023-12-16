@@ -1,143 +1,89 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
 
     <link type="text/css" rel="stylesheet" href="main.css" />
     <link type="text/css" rel="stylesheet" href="new_card.css">
-    <img id="hidden" src="image_rep.svg" style="display:none;">  
-    
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bruno Ace:wght@400&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Red Hat Text:wght@500;700&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Red Hat Display:wght@800&display=swap"
-    />
+    <img id="hidden" src="image_rep.svg" style="display:none;">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bruno Ace:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red Hat Text:wght@500;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red Hat Display:wght@800&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Goldman&display=swap">
 
     <link type="font/ttf" href="Goldman-Regular.ttf" rel="stylesheet">
-  </head>
-  <body style="background-image: url('back.png'); background-size: cover;">
-    <form id="certificateForm">
-      <h2>Certificate Information</h2>
-      
-      <label for="eventType">Event Type:</label>
-      <input type="text" id="eventType" name="eventType" required>
-    
-      <label for="number">Number:</label>
-      <input type="text" id="number" name="number" required>
-    
-      <label for="image">Image URL:</label>
-      <input type="text" id="image" name="image" required>
-    
-      <label for="publisher">Publisher:</label>
-      <input type="text" id="publisher" name="publisher" required>
-    
-      <label for="graduate">Graduate Principal (optional):</label>
-      <input type="text" id="graduate" name="graduate">
-    
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
-    
-      <label for="subject">Subject:</label>
-      <input type="text" id="subject" name="subject" required>
-    
-      <label for="date">Date:</label>
-      <input type="text" id="date" name="date" required>
-    
-      <label for="expire_at">Expiration Date (optional):</label>
-      <input type="text" id="expire_at" name="expire_at">
-    
-      <h3>Metadata (Key-Value Pairs)</h3>
-      <div id="metadataContainer">
-        <div class="metadataEntry">
-          <input type="text" class="metadataKey" placeholder="Key">
-          <input type="text" class="metadataValue" placeholder="Value">
-        </div>
-      </div>
-      <button type="button" onclick="addMetadataField()">Add More Metadata</button>
-    
-      <h3>Reputation</h3>
-      
-      <label for="reviewer">Reviewer Principal:</label>
-      <input type="text" id="reviewer" name="reviewer" required>
-    
-      <label for="category">Category:</label>
-      <input type="text" id="category" name="category" required>
-    
-      <label for="value">Value (0-255):</label>
-      <input type="number" id="value" name="value" min="0" max="255" required>
-    
-      <input type="submit" value="Submit Certificate">
-    </form>
-    
-  
-    <!-- <div class="desktop-3">
-      <div class="desktop-3-inner">
-        <div class="frame-parent">
-          <div class="logo-wrapper">
-            <img class="logo-icon" alt="" src="logo.png" id="logo" />
-          </div>
-          <div class="frame-wrapper">
-            <div class="frame">
-              <div class="avaname">
-                <div class="ava">aVa</div>
-                <div class="verification">verification</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="menu">
-        <div class="nft1">
-          <button class="button" id="button">NFT</button>
-        </div>
-        <div class="nft1">
-          <button class="button" id="button1">dNFT</button>
-        </div>
-        <div class="login1">
-          <button class="button2" id="button2">Login</button>
-        </div>
-      </div>
-      <div class="center">
-        <div class="center1">
-          <div class="creatednfttext">
-            <b class="text">Creating aVa dNFT </b>
-          </div>
-          <div class="uploadlink">
-            <div class="text1">upload link:</div>
-          </div>
-        </div>
-        <div class="uploadblock-wrapper">
-          <section class="uploadblock">
-            <div class="inputandbutton">
-              <div class="inputblock">
-                <input class="input" id="link" type="text" />
-              </div>
-            </div>
-            <div class="createbuttonblock">
-              <div class="create">
-                <button class="button" id="create">create</button>
-              </div>
-            </div>
-          </section>            
-        </div>
-        <div id="resultcontainer"></div>
-        <div class="card-container" >
+</head>
 
-          <section id="result"></section>
-          
-          <section id="result2"></section>
-        
+<body style="background-image: url('back.png'); background-size: cover;">
+    <form id="certificateForm">
+        <h2>Certificate Information</h2>
+
+        <label for="eventType">Event Type:</label>
+        <input type="text" id="eventType" name="eventType" required>
+
+        <label for="number">Number:</label>
+        <input type="text" id="number" name="number" required>
+
+        <label for="image">Image URL:</label>
+        <input type="text" id="image" name="image" required>
+
+        <label for="publisher">Publisher:</label>
+        <input type="text" id="publisher" name="publisher" required>
+
+        <label for="graduate">Graduate Principal (optional):</label>
+        <input type="text" id="graduate" name="graduate">
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required>
+
+        <label for="date">Date:</label>
+        <input type="text" id="date" name="date" required>
+
+        <label for="expire_at">Expiration Date (optional):</label>
+        <input type="text" id="expire_at" name="expire_at">
+
+        <h3>Metadata (Key-Value Pairs)</h3>
+        <div id="metadataContainer">
+            <div class="metadataEntry">
+                <input type="text" class="metadataKey" placeholder="Key">
+                <input type="text" class="metadataValue" placeholder="Value">
+            </div>
         </div>
-      </div>
-    </div>    -->
-  </body>
+        <button type="button" onclick="addMetadataField()">Add More Metadata</button>
+
+        <h3>Reputation</h3>
+
+        <label for="reviewer">Reviewer Principal:</label>
+        <input type="text" id="reviewer" name="reviewer" required>
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required>
+
+        <label for="value">Value (0-255):</label>
+        <input type="number" id="value" name="value" min="0" max="255" required>
+
+        <input type="submit" value="Submit Certificate">
+    </form>
+    <div id="resultcontainer"></div>
+    <div class="card-container">
+        <section id="result"></section>
+    </div>
+</body>
+<script>
+    function addMetadataField() {
+        var container = document.getElementById('metadataContainer');
+        var newField = document.createElement('div');
+        newField.classList.add('metadataEntry');
+        newField.innerHTML = '<input type="text" class="metadataKey" placeholder="Key">' +
+            '<input type="text" class="metadataValue" placeholder="Value">';
+        container.appendChild(newField);
+    }
+</script>
+
 </html>

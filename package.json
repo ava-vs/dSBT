@@ -1,12 +1,13 @@
 {
   "name": "dnft_frontend",
   "version": "0.2.0",
-  "description": "Internet Computer starter application",
+  "description": "aVa Dynamic Soulbound application",
   "keywords": [
     "Internet Computer",
     "Motoko",
     "JavaScript",
-    "Canister"
+    "Canister",
+    "aVa"
   ],
   "scripts": {
     "build": "webpack",
@@ -14,7 +15,7 @@
     "start": "webpack serve --mode development --env development",
     "deploy:local": "dfx deploy --network=local",
     "deploy:ic": "dfx deploy --network=ic",
-    "generate": "dfx generate dnft_backend"
+    "generate": "dfx generate dsbt_backend"
   },
   "dependencies": {
     "@dfinity/agent": "^0.18.1",

@@ -78,7 +78,20 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     { hash = Hash.hash t; key = t };
   };
 
-  public shared ({ caller }) func issueToken(args : Types.RequestType) : async Types.MintReceipt {
+  public shared ({ caller }) func testCard() : async Types.BadgeReceipt {
+    return #Ok {
+      tokenId = 100;
+      owner = { owner = caller; subaccount = null };
+      metadata : [(Text, Text)] = [("Key1", "Value1")];
+      reputation = {
+        reviewer : Text = Principal.toText(caller);
+        category : Text = "IC";
+        value : Nat8 = 10;
+      };
+    };
+  };
+
+  public shared ({ caller }) func issueToken(args : Types.RequestType) : async Types.BadgeReceipt {
     switch (args) {
       case (#Certficate(data)) {
         // issue SBT
@@ -137,6 +150,16 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
                   sender_hash = null;
                 };
                 let emitInstantResult = await hub_instant_canister.emitEvent(event);
+                return #Ok {
+                  tokenId = res;
+                  owner = { owner = caller; subaccount = null };
+                  metadata : [(Text, Text)] = data.metadata;
+                  reputation = {
+                    reviewer : Text = Principal.toText(caller);
+                    category : Text = data.reputation.category;
+                    value : Nat8 = data.reputation.value;
+                  };
+                };
               };
               case (_) {};
             };

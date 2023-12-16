@@ -165,6 +165,19 @@ module {
 
   public type MintReceipt = Result<TokenId, MintError>;
 
+  public type BadgeReceipt = Result<Badge, MintError>;
+
+  public type Badge = {
+    tokenId : TokenId;
+    owner : Account;
+    metadata : [(Text, Text)];
+    reputation : {
+      reviewer : Text;
+      category : Text;
+      value : Nat8;
+    };
+  };
+
   public type TransferReceipt = Result<TransferId, TransferError>;
 
   public type ApprovalReceipt = Result<ApprovalId, ApprovalError>;

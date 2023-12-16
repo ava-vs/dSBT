@@ -6,6 +6,33 @@ let actor = dsbt_backend;
 // Assuming you have a form with id 'certificateForm'
 const certificateForm = document.getElementById('certificateForm');
 
+// Function to dynamically add metadata fields to the form
+function addMetadataField() {
+    const container = document.getElementById('metadataContainer');
+    if (!container) {
+        console.error('The metadata container was not found.');
+        return; // Exit the function if the container doesn't exist
+    }
+
+    const newField = document.createElement('div');
+    newField.classList.add('metadataEntry');
+    newField.innerHTML = `
+        <input type="text" class="metadataKey" placeholder="Key">
+        <input type="text" class="metadataValue" placeholder="Value">
+    `;
+    container.appendChild(newField);
+};
+
+// Event listener for DOMContentLoaded to ensure the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const addButton = document.getElementById('addMetadataButton');
+    if (addButton) {
+        addButton.addEventListener('click', addMetadataField);
+    } else {
+        console.error('The add metadata button was not found.');
+    }
+});
+
 certificateForm.onsubmit = async (e) => {
     e.preventDefault();
 
@@ -89,19 +116,19 @@ certificateForm.onsubmit = async (e) => {
             document.getElementById("resultcontainer").innerText = `Your Dynamic SBT:\n\n`;
 
             document.getElementById('result').appendChild(card);
-        
 
-    } else {
-        // Error - handle the error response
-        console.error('Error issuing token:', badgeReceipt.Err);
-    }
-} catch (error) {
-    // Handle any network or unexpected errors
-    console.error('An error occurred:', error);
-} finally {
-    // Re-enable the submit button
-    submitButton.removeAttribute('disabled');
-};
+
+        } else {
+            // Error - handle the error response
+            console.error('Error issuing token:', badgeReceipt.Err);
+        }
+    } catch (error) {
+        // Handle any network or unexpected errors
+        console.error('An error occurred:', error);
+    } finally {
+        // Re-enable the submit button
+        submitButton.removeAttribute('disabled');
+    };
 
 };
 // For menu and logo

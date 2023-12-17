@@ -1,0 +1,11 @@
+{
+  "dsbt_backend": {
+    "ic": "snrxg-syaaa-aaaal-qcsma-cai"
+  },
+  "frontend": {
+    "ic": "skqrs-7aaaa-aaaal-qcsmq-cai"
+  },
+  "internet_identity": {
+    "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+  }
+}

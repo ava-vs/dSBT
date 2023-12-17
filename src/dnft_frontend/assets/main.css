@@ -25,6 +25,7 @@ body {
   
     /* Colors */
     --color-orangered: #ee4817;
+    --primary-color: #ee4817;
     --color-white: #fff;
   
     /* Gaps */
@@ -327,4 +328,78 @@ button[type="submit"] {
     color: var(--color-orangered);
     font-family: var(--font-bruno-ace);
   }
-  
+  /* Reusing existing styles for form elements */
+
+/* Apply the .input class style to text and number inputs */
+form#certificateForm input[type="text"],
+form#certificateForm input[type="number"] {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-orangered);
+    padding: var(--padding-3xs);
+    height: 40px; /* Assuming a standard height for inputs */
+    margin: var(--padding-3xs) 0; /* Add some vertical spacing */
+    width: calc(100% - 2 * var(--padding-3xs)); /* Adjust width to account for padding */
+    box-sizing: border-box;
+}
+
+/* Apply the .button styles to the submit button */
+form#certificateForm input[type="submit"] {
+    padding: var(--padding-3xs);
+    background-color: var(--primary-color); /* Assuming --primary-color is defined */
+    color: var(--color-white);
+    border: none;
+    cursor: pointer;
+    margin-top: 20px; /* Space above the submit button */
+    width: auto; /* Auto width to fit content */
+}
+
+/* Apply the .button styles to the 'Add More Metadata' button */
+form#certificateForm button {
+    padding: var(--padding-3xs);
+    background-color: var(--primary-color); /* Assuming --primary-color is defined */
+    color: var(--color-white);
+    border: none;
+    border-radius: 4px; /* Optional: if you want rounded corners */
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Hover effects */
+form#certificateForm input[type="submit"]:hover,
+form#certificateForm button:hover {
+    background-color: darken(var(--primary-color), 10%); /* Darken the button color on hover */
+}
+
+/* Additional styles for the form layout */
+form#certificateForm {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align the form elements */
+    gap: 0.5em;
+    max-width: 40vw;
+    margin: 20px auto; /* Add some top and bottom margin */
+    padding: var(--padding-3xs);
+}
+
+/* Metadata container styles */
+#metadataContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5em;
+}
+
+/* Metadata entry styles */
+.metadataEntry {
+    display: flex;
+    gap: 0.5em;
+}
+
+/* Ensure the form is centered and has a max-width */
+form#certificateForm {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f7f7f7;
+    border-radius: 8px;
+}

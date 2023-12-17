@@ -37,7 +37,7 @@ const canisterEnvVariables = initCanisterEnv();
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-const internetIdentityUrl = network === "local" ? `http://localhost:4943/?canisterId=${canisterEnvVariables["INTERNET_IDENTITY_CANISTER_ID"]}` : `https://identity.ic0.app`
+const internetIdentityUrl = network === "local" ? `http://localhost:8000/?canisterId=${canisterEnvVariables["INTERNET_IDENTITY_CANISTER_ID"]}` : `https://identity.ic0.app`
 
 const frontendDirectory = "dnft_frontend";
 
@@ -46,6 +46,9 @@ const frontend_entry = path.join("src", frontendDirectory, "src", "index.html");
 module.exports = {
   target: "web",
   mode: isDevelopment ? "development" : "production",
+  experiments: {
+    topLevelAwait: true
+  },
   entry: {
     // The frontend.entrypoint points to the HTML file for this build, so we need
     // to replace the extension to `.js`.

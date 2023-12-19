@@ -589,26 +589,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     };
     return result;
   };
-
-  // private func _addTokenToOwners(account : Types.Account, tokenId : Types.TokenId) {
-  //   //get Textual rapresentation of the Account
-  //   let textAccount : Text = Utils.accountToText({
-  //     owner = account.owner;
-  //     subaccount = null;
-  //   });
-
-  //   //find the token owned by an account, in order to replace it
-  //   let existingToken = Trie.get(owners, _keyFromText textAccount, Text.equal);
-
-  //   switch (existingToken) {
-  //     case (null) {
-  //       owners := Trie.put(owners, _keyFromText textAccount, Text.equal, tokenId).0;
-  //     };
-  //     case (?elem) {};
-  //   };
-
-  // };
-
+ 
   private func _addTokenToOwners(account : Types.Account, tokenId : Types.TokenId) {
     //get Textual rapresentation of the Account
     let textAccount : Text = Utils.accountToText(account);

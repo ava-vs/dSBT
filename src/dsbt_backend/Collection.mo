@@ -489,7 +489,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
       is_atomic = null;
       memo = null;
       spender_subaccount = null;
-      to = { owner = caller; subaccount = null };
+      to = owner;
       token_ids = burnArg.token_ids;
     };
     await icrc7_transfer(burnArg);

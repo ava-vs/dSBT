@@ -4,9 +4,11 @@ import Bool "mo:base/Bool";
 import Buffer "mo:base/Buffer";
 import Hash "mo:base/Hash";
 import HashMap "mo:base/HashMap";
+import Int "mo:base/Int";
 import Nat "mo:base/Nat";
 import Nat16 "mo:base/Nat16";
 import Nat64 "mo:base/Nat64";
+import Nat8 "mo:base/Nat8";
 import Option "mo:base/Option";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
@@ -14,8 +16,7 @@ import Text "mo:base/Text";
 import Time "mo:base/Time";
 import Trie "mo:base/Trie";
 import TrieMap "mo:base/TrieMap";
-import Nat8 "mo:base/Nat8";
-import Int "mo:base/Int";
+import TrieSet "mo:base/TrieSet";
 
 import Types "./Types";
 import Utils "./Utils";
@@ -23,7 +24,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
 
   private stable let hub_canister_id = "lyp2p-oiaaa-aaaan-qedqq-cai";
   private stable var owner : Types.Account = collectionOwner;
-
+  let owner_principal = owner.owner;
   private stable var name : Text = init.name;
   private stable var symbol : Text = init.symbol;
   private stable var royalties : ?Nat16 = init.royalties;
@@ -63,6 +64,9 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
   type Trie<K, V> = Trie.Trie<K, V>;
   type Key<K> = Trie.Key<K>;
 
+  type UserId = Principal;
+  type Set<T> = Trie.Trie<T, ()>;
+
   // we have to provide `put`, `get` and `remove` with
   // a record of type `Key<K> = { hash: Hash.Hash; key: K }`;
   // thus we define the following function that takes a value of type `K`
@@ -77,22 +81,43 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
   private func _keyFromTransactionId(t : Types.TransactionId) : Key<Types.TransactionId> {
     { hash = Hash.hash t; key = t };
   };
+  private func _keyFromPrincipal(p : Principal) : Key<Principal> {
+    { hash = Principal.hash(p); key = p };
+  };
+  private stable var whitelist : Trie.Trie<Principal, ()> = Trie.put(Trie.empty<Principal, ()>(), _keyFromPrincipal(owner_principal), Principal.equal, ()).0;
 
-  public shared ({ caller }) func test() : async Types.BadgeReceipt {
-    return #Ok {
-      tokenId = 100;
-      owner = { owner = caller; subaccount = null };
-      metadata : [(Text, Text)] = [("Key1", "Value1")];
-      reputation = {
-        reviewer : Text = Principal.toText(caller);
-        category : Text = "IC";
-        value : Nat8 = 10;
-      };
+  // private stable var whitelist : Set<UserId> = Trie.empty();
+
+  public shared ({ caller }) func addUser(userId : UserId) {
+    if (await isUserInWhitelist(caller)) whitelist := Trie.put(whitelist, _keyFromPrincipal userId, Principal.equal, ()).0;
+  };
+
+  public shared ({ caller }) func removeUser(userId : UserId) {
+    if (await isUserInWhitelist(caller)) whitelist := Trie.remove(whitelist, _keyFromPrincipal userId, Principal.equal).0;
+  };
+
+  public query func isUserInWhitelist(userId : Principal) : async Bool {
+    switch (Trie.get(whitelist, _keyFromPrincipal(userId), Principal.equal)) {
+      case (null) { false }; // User not found
+      case (_) { true }; // User found
     };
   };
 
+  // public shared ({ caller }) func test() : async Types.BadgeReceipt {
+  //   return #Ok {
+  //     tokenId = 100;
+  //     owner = { owner = caller; subaccount = null };
+  //     metadata : [(Text, Text)] = [("Key1", "Value1")];
+  //     reputation = {
+  //       reviewer : Text = Principal.toText(caller);
+  //       category : Text = "IC";
+  //       value : Nat8 = 10;
+  //     };
+  //   };
+  // };
+
   public shared ({ caller }) func issueToken(args : Types.RequestType) : async Types.BadgeReceipt {
-    switch (args) {
+    if (await isUserInWhitelist(caller)) switch (args) {
       case (#Certficate(data)) {
         // issue SBT
         let default_arg = {
@@ -612,25 +637,6 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     };
     return result;
   };
-
-  // private func _addTokenToOwners(account : Types.Account, tokenId : Types.TokenId) {
-  //   //get Textual rapresentation of the Account
-  //   let textAccount : Text = Utils.accountToText({
-  //     owner = account.owner;
-  //     subaccount = null;
-  //   });
-
-  //   //find the token owned by an account, in order to replace it
-  //   let existingToken = Trie.get(owners, _keyFromText textAccount, Text.equal);
-
-  //   switch (existingToken) {
-  //     case (null) {
-  //       owners := Trie.put(owners, _keyFromText textAccount, Text.equal, tokenId).0;
-  //     };
-  //     case (?elem) {};
-  //   };
-
-  // };
 
   private func _addTokenToOwners(account : Types.Account, tokenId : Types.TokenId) {
     //get Textual rapresentation of the Account

@@ -203,7 +203,7 @@ shared actor class Collection(collectionOwner : Types.Account, init : Types.Coll
     #Err(#Unauthorized);
   };
 
-  public shared ({ caller }) func issueSBT(
+  func issueSBT(
     to : Types.Account,
     metadata : [(Text, Types.Metadata)],
     reputation : {
